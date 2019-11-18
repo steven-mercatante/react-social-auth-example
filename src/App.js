@@ -93,9 +93,6 @@ function App() {
   }
 
   function handleLogout() {
-    dispatch({ type: "LOGOUT" });
-    Cookies.remove("auth_token");
-
     axios
       .post(
         "http://127.0.0.1:8000/users/logout",
@@ -109,6 +106,11 @@ function App() {
       })
       .catch(err => {
         console.log(err);
+      })
+      .finally(() => {
+        dispatch({ type: "LOGOUT" });
+        // Deleting the cookie before making the API request will return a 401, since the API requires a token
+        Cookies.remove("auth_token");
       });
   }
 
