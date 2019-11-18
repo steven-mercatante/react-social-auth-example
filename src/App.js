@@ -1,5 +1,28 @@
 import React, { useEffect, useReducer, useRef } from "react";
+import request from "axios";
 import "./App.css";
+
+function getCookie(name) {
+  let cookie = {};
+  document.cookie.split(";").forEach(function(el) {
+    let [k, v] = el.split("=");
+    cookie[k.trim()] = v;
+  });
+  return cookie[name];
+}
+
+request
+  .get("http://127.0.0.1:8000/clients/", {
+    headers: {
+      Authorization: `Token ${getCookie("auth_token")}`
+    }
+  })
+  .then(resp => {
+    console.log("resp", resp.data);
+  })
+  .catch(err => {
+    console.log(err);
+  });
 
 function authReducer(state, event) {
   switch (event.type) {
